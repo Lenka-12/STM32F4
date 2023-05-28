@@ -7,4 +7,5 @@ DMA is used to Trasmit via UART.
 UART Recieve function will be added soon.
 
 
-This can run on VSCode, if all required extension tools are added. But, UART,I2C and DS3231 libraries can be easily modified to work on with any F4 MCU.
+This can run on VSCode, if all required extension tools are added. But, UART,I2C and DS3231 libraries can be easily modified to work with any F4 MCU.
+
