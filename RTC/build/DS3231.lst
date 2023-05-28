@@ -1,0 +1,348 @@
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"DS3231.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/DS3231.c"
+  20              		.section	.text.dectoBCD,"ax",%progbits
+  21              		.align	1
+  22              		.global	dectoBCD
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	dectoBCD:
+  28              	.LVL0:
+  29              	.LFB130:
+   1:Core/Src/DS3231.c **** /*
+   2:Core/Src/DS3231.c ****  * DS3231.c
+   3:Core/Src/DS3231.c ****  *
+   4:Core/Src/DS3231.c ****  *  Created on: May 26, 2023
+   5:Core/Src/DS3231.c ****  *      Author: David
+   6:Core/Src/DS3231.c ****  */
+   7:Core/Src/DS3231.c **** 
+   8:Core/Src/DS3231.c **** #include "DS3231.h"
+   9:Core/Src/DS3231.c **** 
+  10:Core/Src/DS3231.c **** uint8_t dectoBCD(int num){
+  30              		.loc 1 10 26 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  11:Core/Src/DS3231.c **** 	return (uint8_t)(((num/10)<<4) | (num%10));
+  35              		.loc 1 11 2 view .LVU1
+  36              		.loc 1 11 24 is_stmt 0 view .LVU2
+  37 0000 064A     		ldr	r2, .L2
+  38 0002 82FB0032 		smull	r3, r2, r2, r0
+  39 0006 C317     		asrs	r3, r0, #31
+  40 0008 C3EBA203 		rsb	r3, r3, r2, asr #2
+  41              		.loc 1 11 39 view .LVU3
+  42 000c 03EB8302 		add	r2, r3, r3, lsl #2
+  43 0010 A0EB4200 		sub	r0, r0, r2, lsl #1
+  44              	.LVL1:
+  45              		.loc 1 11 33 view .LVU4
+  46 0014 40EA0310 		orr	r0, r0, r3, lsl #4
+  12:Core/Src/DS3231.c **** }
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 2
+
+
+  47              		.loc 1 12 1 view .LVU5
+  48 0018 C0B2     		uxtb	r0, r0
+  49 001a 7047     		bx	lr
+  50              	.L3:
+  51              		.align	2
+  52              	.L2:
+  53 001c 67666666 		.word	1717986919
+  54              		.cfi_endproc
+  55              	.LFE130:
+  57              		.section	.text.BCDtodec,"ax",%progbits
+  58              		.align	1
+  59              		.global	BCDtodec
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  64              	BCDtodec:
+  65              	.LVL2:
+  66              	.LFB131:
+  13:Core/Src/DS3231.c **** 
+  14:Core/Src/DS3231.c **** int BCDtodec(uint8_t num){
+  67              		.loc 1 14 26 is_stmt 1 view -0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  15:Core/Src/DS3231.c **** 	return (int)(((num>>4)*10)+(num&0x0F));
+  72              		.loc 1 15 2 view .LVU7
+  73              		.loc 1 15 20 is_stmt 0 view .LVU8
+  74 0000 0309     		lsrs	r3, r0, #4
+  75              		.loc 1 15 24 view .LVU9
+  76 0002 03EB8303 		add	r3, r3, r3, lsl #2
+  77              		.loc 1 15 33 view .LVU10
+  78 0006 00F00F00 		and	r0, r0, #15
+  79              	.LVL3:
+  16:Core/Src/DS3231.c **** }
+  80              		.loc 1 16 1 view .LVU11
+  81 000a 00EB4300 		add	r0, r0, r3, lsl #1
+  82 000e 7047     		bx	lr
+  83              		.cfi_endproc
+  84              	.LFE131:
+  86              		.section	.text.Set_Time,"ax",%progbits
+  87              		.align	1
+  88              		.global	Set_Time
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  93              	Set_Time:
+  94              	.LVL4:
+  95              	.LFB132:
+  17:Core/Src/DS3231.c **** 
+  18:Core/Src/DS3231.c **** void Set_Time(Time* Current_Time){
+  96              		.loc 1 18 34 is_stmt 1 view -0
+  97              		.cfi_startproc
+  98              		@ args = 0, pretend = 0, frame = 8
+  99              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100              		.loc 1 18 34 is_stmt 0 view .LVU13
+ 101 0000 10B5     		push	{r4, lr}
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 3
+
+
+ 102              		.cfi_def_cfa_offset 8
+ 103              		.cfi_offset 4, -8
+ 104              		.cfi_offset 14, -4
+ 105 0002 82B0     		sub	sp, sp, #8
+ 106              		.cfi_def_cfa_offset 16
+ 107 0004 0446     		mov	r4, r0
+  19:Core/Src/DS3231.c **** 	uint8_t buffer[8];
+ 108              		.loc 1 19 2 is_stmt 1 view .LVU14
+  20:Core/Src/DS3231.c **** 	buffer[0] = SEC_ADD;
+ 109              		.loc 1 20 2 view .LVU15
+ 110              		.loc 1 20 12 is_stmt 0 view .LVU16
+ 111 0006 0023     		movs	r3, #0
+ 112 0008 8DF80030 		strb	r3, [sp]
+  21:Core/Src/DS3231.c **** 	buffer[1] = dectoBCD(Current_Time-> sec);
+ 113              		.loc 1 21 2 is_stmt 1 view .LVU17
+ 114              		.loc 1 21 14 is_stmt 0 view .LVU18
+ 115 000c 0068     		ldr	r0, [r0]
+ 116              	.LVL5:
+ 117              		.loc 1 21 14 view .LVU19
+ 118 000e FFF7FEFF 		bl	dectoBCD
+ 119              	.LVL6:
+ 120              		.loc 1 21 12 view .LVU20
+ 121 0012 8DF80100 		strb	r0, [sp, #1]
+  22:Core/Src/DS3231.c **** 	buffer[2] = dectoBCD(Current_Time-> min);
+ 122              		.loc 1 22 2 is_stmt 1 view .LVU21
+ 123              		.loc 1 22 14 is_stmt 0 view .LVU22
+ 124 0016 6068     		ldr	r0, [r4, #4]
+ 125 0018 FFF7FEFF 		bl	dectoBCD
+ 126              	.LVL7:
+ 127              		.loc 1 22 12 view .LVU23
+ 128 001c 8DF80200 		strb	r0, [sp, #2]
+  23:Core/Src/DS3231.c **** 	buffer[3] = dectoBCD(Current_Time-> hr);
+ 129              		.loc 1 23 2 is_stmt 1 view .LVU24
+ 130              		.loc 1 23 14 is_stmt 0 view .LVU25
+ 131 0020 A068     		ldr	r0, [r4, #8]
+ 132 0022 FFF7FEFF 		bl	dectoBCD
+ 133              	.LVL8:
+ 134              		.loc 1 23 12 view .LVU26
+ 135 0026 8DF80300 		strb	r0, [sp, #3]
+  24:Core/Src/DS3231.c **** 	buffer[4] = dectoBCD(Current_Time-> dow);
+ 136              		.loc 1 24 2 is_stmt 1 view .LVU27
+ 137              		.loc 1 24 14 is_stmt 0 view .LVU28
+ 138 002a E068     		ldr	r0, [r4, #12]
+ 139 002c FFF7FEFF 		bl	dectoBCD
+ 140              	.LVL9:
+ 141              		.loc 1 24 12 view .LVU29
+ 142 0030 8DF80400 		strb	r0, [sp, #4]
+  25:Core/Src/DS3231.c **** 	buffer[5] = dectoBCD(Current_Time-> dom);
+ 143              		.loc 1 25 2 is_stmt 1 view .LVU30
+ 144              		.loc 1 25 14 is_stmt 0 view .LVU31
+ 145 0034 2069     		ldr	r0, [r4, #16]
+ 146 0036 FFF7FEFF 		bl	dectoBCD
+ 147              	.LVL10:
+ 148              		.loc 1 25 12 view .LVU32
+ 149 003a 8DF80500 		strb	r0, [sp, #5]
+  26:Core/Src/DS3231.c **** 	buffer[6] = dectoBCD(Current_Time-> mon);
+ 150              		.loc 1 26 2 is_stmt 1 view .LVU33
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 4
+
+
+ 151              		.loc 1 26 14 is_stmt 0 view .LVU34
+ 152 003e 6069     		ldr	r0, [r4, #20]
+ 153 0040 FFF7FEFF 		bl	dectoBCD
+ 154              	.LVL11:
+ 155              		.loc 1 26 12 view .LVU35
+ 156 0044 8DF80600 		strb	r0, [sp, #6]
+  27:Core/Src/DS3231.c **** 	buffer[7] = dectoBCD(Current_Time-> yr);
+ 157              		.loc 1 27 2 is_stmt 1 view .LVU36
+ 158              		.loc 1 27 14 is_stmt 0 view .LVU37
+ 159 0048 A069     		ldr	r0, [r4, #24]
+ 160 004a FFF7FEFF 		bl	dectoBCD
+ 161              	.LVL12:
+ 162              		.loc 1 27 12 view .LVU38
+ 163 004e 8DF80700 		strb	r0, [sp, #7]
+  28:Core/Src/DS3231.c **** 	I2C_Master_Transmit(ADD,buffer, 8);
+ 164              		.loc 1 28 2 is_stmt 1 view .LVU39
+ 165 0052 0822     		movs	r2, #8
+ 166 0054 6946     		mov	r1, sp
+ 167 0056 6820     		movs	r0, #104
+ 168 0058 FFF7FEFF 		bl	I2C_Master_Transmit
+ 169              	.LVL13:
+  29:Core/Src/DS3231.c **** 
+  30:Core/Src/DS3231.c **** }
+ 170              		.loc 1 30 1 is_stmt 0 view .LVU40
+ 171 005c 02B0     		add	sp, sp, #8
+ 172              		.cfi_def_cfa_offset 8
+ 173              		@ sp needed
+ 174 005e 10BD     		pop	{r4, pc}
+ 175              		.loc 1 30 1 view .LVU41
+ 176              		.cfi_endproc
+ 177              	.LFE132:
+ 179              		.section	.text.Get_Time,"ax",%progbits
+ 180              		.align	1
+ 181              		.global	Get_Time
+ 182              		.syntax unified
+ 183              		.thumb
+ 184              		.thumb_func
+ 186              	Get_Time:
+ 187              	.LVL14:
+ 188              	.LFB133:
+  31:Core/Src/DS3231.c **** void Get_Time(Time* time){
+ 189              		.loc 1 31 26 is_stmt 1 view -0
+ 190              		.cfi_startproc
+ 191              		@ args = 0, pretend = 0, frame = 8
+ 192              		@ frame_needed = 0, uses_anonymous_args = 0
+ 193              		.loc 1 31 26 is_stmt 0 view .LVU43
+ 194 0000 10B5     		push	{r4, lr}
+ 195              		.cfi_def_cfa_offset 8
+ 196              		.cfi_offset 4, -8
+ 197              		.cfi_offset 14, -4
+ 198 0002 84B0     		sub	sp, sp, #16
+ 199              		.cfi_def_cfa_offset 24
+ 200 0004 0446     		mov	r4, r0
+  32:Core/Src/DS3231.c **** 	uint8_t current_time[7];
+ 201              		.loc 1 32 2 is_stmt 1 view .LVU44
+  33:Core/Src/DS3231.c **** 	I2C_Mem_Read(ADD, SEC_ADD, 1, current_time, 7);
+ 202              		.loc 1 33 2 view .LVU45
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 5
+
+
+ 203 0006 0723     		movs	r3, #7
+ 204 0008 0093     		str	r3, [sp]
+ 205 000a 02AB     		add	r3, sp, #8
+ 206 000c 0122     		movs	r2, #1
+ 207 000e 0021     		movs	r1, #0
+ 208 0010 6820     		movs	r0, #104
+ 209              	.LVL15:
+ 210              		.loc 1 33 2 is_stmt 0 view .LVU46
+ 211 0012 FFF7FEFF 		bl	I2C_Mem_Read
+ 212              	.LVL16:
+  34:Core/Src/DS3231.c **** 
+  35:Core/Src/DS3231.c **** 	time->sec = BCDtodec( current_time[0]);
+ 213              		.loc 1 35 2 is_stmt 1 view .LVU47
+ 214              		.loc 1 35 14 is_stmt 0 view .LVU48
+ 215 0016 9DF80800 		ldrb	r0, [sp, #8]	@ zero_extendqisi2
+ 216 001a FFF7FEFF 		bl	BCDtodec
+ 217              	.LVL17:
+ 218              		.loc 1 35 12 view .LVU49
+ 219 001e 2060     		str	r0, [r4]
+  36:Core/Src/DS3231.c **** 	time->min = BCDtodec( current_time[1]);
+ 220              		.loc 1 36 2 is_stmt 1 view .LVU50
+ 221              		.loc 1 36 14 is_stmt 0 view .LVU51
+ 222 0020 9DF80900 		ldrb	r0, [sp, #9]	@ zero_extendqisi2
+ 223 0024 FFF7FEFF 		bl	BCDtodec
+ 224              	.LVL18:
+ 225              		.loc 1 36 12 view .LVU52
+ 226 0028 6060     		str	r0, [r4, #4]
+  37:Core/Src/DS3231.c **** 	time->hr= BCDtodec( current_time[2]);
+ 227              		.loc 1 37 2 is_stmt 1 view .LVU53
+ 228              		.loc 1 37 12 is_stmt 0 view .LVU54
+ 229 002a 9DF80A00 		ldrb	r0, [sp, #10]	@ zero_extendqisi2
+ 230 002e FFF7FEFF 		bl	BCDtodec
+ 231              	.LVL19:
+ 232              		.loc 1 37 10 view .LVU55
+ 233 0032 A060     		str	r0, [r4, #8]
+  38:Core/Src/DS3231.c **** 	time->dow = BCDtodec( current_time[3]);
+ 234              		.loc 1 38 2 is_stmt 1 view .LVU56
+ 235              		.loc 1 38 14 is_stmt 0 view .LVU57
+ 236 0034 9DF80B00 		ldrb	r0, [sp, #11]	@ zero_extendqisi2
+ 237 0038 FFF7FEFF 		bl	BCDtodec
+ 238              	.LVL20:
+ 239              		.loc 1 38 12 view .LVU58
+ 240 003c E060     		str	r0, [r4, #12]
+  39:Core/Src/DS3231.c **** 	time->dom = BCDtodec( current_time[4]);
+ 241              		.loc 1 39 2 is_stmt 1 view .LVU59
+ 242              		.loc 1 39 14 is_stmt 0 view .LVU60
+ 243 003e 9DF80C00 		ldrb	r0, [sp, #12]	@ zero_extendqisi2
+ 244 0042 FFF7FEFF 		bl	BCDtodec
+ 245              	.LVL21:
+ 246              		.loc 1 39 12 view .LVU61
+ 247 0046 2061     		str	r0, [r4, #16]
+  40:Core/Src/DS3231.c **** 	time->mon = BCDtodec( current_time[5]);
+ 248              		.loc 1 40 2 is_stmt 1 view .LVU62
+ 249              		.loc 1 40 14 is_stmt 0 view .LVU63
+ 250 0048 9DF80D00 		ldrb	r0, [sp, #13]	@ zero_extendqisi2
+ 251 004c FFF7FEFF 		bl	BCDtodec
+ 252              	.LVL22:
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 6
+
+
+ 253              		.loc 1 40 12 view .LVU64
+ 254 0050 6061     		str	r0, [r4, #20]
+  41:Core/Src/DS3231.c **** 	time->yr = BCDtodec( current_time[6]);
+ 255              		.loc 1 41 2 is_stmt 1 view .LVU65
+ 256              		.loc 1 41 13 is_stmt 0 view .LVU66
+ 257 0052 9DF80E00 		ldrb	r0, [sp, #14]	@ zero_extendqisi2
+ 258 0056 FFF7FEFF 		bl	BCDtodec
+ 259              	.LVL23:
+ 260              		.loc 1 41 11 view .LVU67
+ 261 005a A061     		str	r0, [r4, #24]
+  42:Core/Src/DS3231.c **** 
+  43:Core/Src/DS3231.c **** 
+  44:Core/Src/DS3231.c **** }
+ 262              		.loc 1 44 1 view .LVU68
+ 263 005c 04B0     		add	sp, sp, #16
+ 264              		.cfi_def_cfa_offset 8
+ 265              		@ sp needed
+ 266 005e 10BD     		pop	{r4, pc}
+ 267              		.loc 1 44 1 view .LVU69
+ 268              		.cfi_endproc
+ 269              	.LFE133:
+ 271              		.text
+ 272              	.Letext0:
+ 273              		.file 2 "c:\\users\\david\\appdata\\roaming\\code\\user\\globalstorage\\bmd.stm32-for-vscode\\@xpa
+ 274              		.file 3 "c:\\users\\david\\appdata\\roaming\\code\\user\\globalstorage\\bmd.stm32-for-vscode\\@xpa
+ 275              		.file 4 "Core/Inc/DS3231.h"
+ 276              		.file 5 "Core/Inc/i2c.h"
+ARM GAS  C:\Users\David\AppData\Local\Temp\cc3yHcjs.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 DS3231.c
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:21     .text.dectoBCD:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:27     .text.dectoBCD:0000000000000000 dectoBCD
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:53     .text.dectoBCD:000000000000001c $d
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:58     .text.BCDtodec:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:64     .text.BCDtodec:0000000000000000 BCDtodec
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:87     .text.Set_Time:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:93     .text.Set_Time:0000000000000000 Set_Time
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:180    .text.Get_Time:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cc3yHcjs.s:186    .text.Get_Time:0000000000000000 Get_Time
+
+UNDEFINED SYMBOLS
+I2C_Master_Transmit
+I2C_Mem_Read

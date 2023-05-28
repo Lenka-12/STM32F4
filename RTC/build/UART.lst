@@ -1,0 +1,280 @@
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"UART.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/UART.c"
+  20              		.section	.text.UART2_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	UART2_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	UART2_Init:
+  28              	.LFB130:
+   1:Core/Src/UART.c **** #include "UART.h"
+   2:Core/Src/UART.c **** 
+   3:Core/Src/UART.c **** 
+   4:Core/Src/UART.c **** void UART2_Init(void){
+  29              		.loc 1 4 22 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   5:Core/Src/UART.c ****     RCC ->AHB1ENR|= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_DMA1EN; //Enable clock for GPIOA and DMA1 
+  34              		.loc 1 5 5 view .LVU1
+  35              		.loc 1 5 9 is_stmt 0 view .LVU2
+  36 0000 1A4A     		ldr	r2, .L2
+  37 0002 136B     		ldr	r3, [r2, #48]
+  38              		.loc 1 5 18 view .LVU3
+  39 0004 43F40013 		orr	r3, r3, #2097152
+  40 0008 43F00103 		orr	r3, r3, #1
+  41 000c 1363     		str	r3, [r2, #48]
+   6:Core/Src/UART.c ****     RCC -> APB1ENR |= RCC_APB1ENR_USART2EN; //Enable Clock for USART2
+  42              		.loc 1 6 5 is_stmt 1 view .LVU4
+  43              		.loc 1 6 9 is_stmt 0 view .LVU5
+  44 000e 136C     		ldr	r3, [r2, #64]
+  45              		.loc 1 6 20 view .LVU6
+  46 0010 43F40033 		orr	r3, r3, #131072
+  47 0014 1364     		str	r3, [r2, #64]
+   7:Core/Src/UART.c **** 
+   8:Core/Src/UART.c ****     GPIOA -> MODER &=~(GPIO_MODER_MODER2 |GPIO_MODER_MODER3);  //Reset PA3 and PA2
+  48              		.loc 1 8 5 is_stmt 1 view .LVU7
+  49              		.loc 1 8 11 is_stmt 0 view .LVU8
+  50 0016 164B     		ldr	r3, .L2+4
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 2
+
+
+  51 0018 1A68     		ldr	r2, [r3]
+  52              		.loc 1 8 20 view .LVU9
+  53 001a 22F0F002 		bic	r2, r2, #240
+  54 001e 1A60     		str	r2, [r3]
+   9:Core/Src/UART.c ****     GPIOA -> MODER |=  GPIO_MODER_MODER2_1|GPIO_MODER_MODER3_1;  //AF Mode PA3 and PA2
+  55              		.loc 1 9 5 is_stmt 1 view .LVU10
+  56              		.loc 1 9 11 is_stmt 0 view .LVU11
+  57 0020 1A68     		ldr	r2, [r3]
+  58              		.loc 1 9 20 view .LVU12
+  59 0022 42F0A002 		orr	r2, r2, #160
+  60 0026 1A60     		str	r2, [r3]
+  10:Core/Src/UART.c ****     GPIOA -> OTYPER &= ~(GPIO_OTYPER_OT2 | GPIO_OTYPER_OT3); //Output Push Pull
+  61              		.loc 1 10 5 is_stmt 1 view .LVU13
+  62              		.loc 1 10 11 is_stmt 0 view .LVU14
+  63 0028 5A68     		ldr	r2, [r3, #4]
+  64              		.loc 1 10 21 view .LVU15
+  65 002a 22F00C02 		bic	r2, r2, #12
+  66 002e 5A60     		str	r2, [r3, #4]
+  11:Core/Src/UART.c ****     GPIOA -> OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2_0 | GPIO_OSPEEDER_OSPEEDR3_0; //Medium Speed
+  67              		.loc 1 11 5 is_stmt 1 view .LVU16
+  68              		.loc 1 11 11 is_stmt 0 view .LVU17
+  69 0030 9A68     		ldr	r2, [r3, #8]
+  70              		.loc 1 11 22 view .LVU18
+  71 0032 42F05002 		orr	r2, r2, #80
+  72 0036 9A60     		str	r2, [r3, #8]
+  12:Core/Src/UART.c ****     GPIOA ->AFR[0]   |= (0x0077 << 8);  //AFRL , AF7 for USART2
+  73              		.loc 1 12 5 is_stmt 1 view .LVU19
+  74              		.loc 1 12 16 is_stmt 0 view .LVU20
+  75 0038 1A6A     		ldr	r2, [r3, #32]
+  76              		.loc 1 12 22 view .LVU21
+  77 003a 42F4EE42 		orr	r2, r2, #30464
+  78 003e 1A62     		str	r2, [r3, #32]
+  13:Core/Src/UART.c **** 
+  14:Core/Src/UART.c **** 
+  15:Core/Src/UART.c ****     USART2 -> CR1 |= USART_CR1_UE; //Enable USART2
+  79              		.loc 1 15 5 is_stmt 1 view .LVU22
+  80              		.loc 1 15 12 is_stmt 0 view .LVU23
+  81 0040 A3F5DE33 		sub	r3, r3, #113664
+  82 0044 DA68     		ldr	r2, [r3, #12]
+  83              		.loc 1 15 19 view .LVU24
+  84 0046 42F40052 		orr	r2, r2, #8192
+  85 004a DA60     		str	r2, [r3, #12]
+  16:Core/Src/UART.c ****     USART2 -> CR1 &= ~(USART_CR1_M); //8 data bits, 1 Start Bit
+  86              		.loc 1 16 5 is_stmt 1 view .LVU25
+  87              		.loc 1 16 12 is_stmt 0 view .LVU26
+  88 004c DA68     		ldr	r2, [r3, #12]
+  89              		.loc 1 16 19 view .LVU27
+  90 004e 22F48052 		bic	r2, r2, #4096
+  91 0052 DA60     		str	r2, [r3, #12]
+  17:Core/Src/UART.c ****     USART2 -> CR2 &= ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);  //1 Stop Bit
+  92              		.loc 1 17 5 is_stmt 1 view .LVU28
+  93              		.loc 1 17 12 is_stmt 0 view .LVU29
+  94 0054 1A69     		ldr	r2, [r3, #16]
+  95              		.loc 1 17 19 view .LVU30
+  96 0056 22F44052 		bic	r2, r2, #12288
+  97 005a 1A61     		str	r2, [r3, #16]
+  18:Core/Src/UART.c ****     USART2 -> CR3 |= USART_CR3_DMAT;  //Enable DMA Transfer
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 3
+
+
+  98              		.loc 1 18 5 is_stmt 1 view .LVU31
+  99              		.loc 1 18 12 is_stmt 0 view .LVU32
+ 100 005c 5A69     		ldr	r2, [r3, #20]
+ 101              		.loc 1 18 19 view .LVU33
+ 102 005e 42F08002 		orr	r2, r2, #128
+ 103 0062 5A61     		str	r2, [r3, #20]
+  19:Core/Src/UART.c ****     USART2 -> BRR = 0x0683;  // 9600 Baud Rate, 16MHz clock speed, Over sampling by 16
+ 104              		.loc 1 19 5 is_stmt 1 view .LVU34
+ 105              		.loc 1 19 19 is_stmt 0 view .LVU35
+ 106 0064 40F28362 		movw	r2, #1667
+ 107 0068 9A60     		str	r2, [r3, #8]
+  20:Core/Src/UART.c **** 
+  21:Core/Src/UART.c **** 
+  22:Core/Src/UART.c **** }
+ 108              		.loc 1 22 1 view .LVU36
+ 109 006a 7047     		bx	lr
+ 110              	.L3:
+ 111              		.align	2
+ 112              	.L2:
+ 113 006c 00380240 		.word	1073887232
+ 114 0070 00000240 		.word	1073872896
+ 115              		.cfi_endproc
+ 116              	.LFE130:
+ 118              		.section	.text.UART2_DMA_Transmit,"ax",%progbits
+ 119              		.align	1
+ 120              		.global	UART2_DMA_Transmit
+ 121              		.syntax unified
+ 122              		.thumb
+ 123              		.thumb_func
+ 125              	UART2_DMA_Transmit:
+ 126              	.LVL0:
+ 127              	.LFB131:
+  23:Core/Src/UART.c **** void UART2_DMA_Transmit(uint8_t*pData,uint16_t Size){
+ 128              		.loc 1 23 53 is_stmt 1 view -0
+ 129              		.cfi_startproc
+ 130              		@ args = 0, pretend = 0, frame = 0
+ 131              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132              		@ link register save eliminated.
+  24:Core/Src/UART.c ****     /**
+  25:Core/Src/UART.c ****      * 1. Write the USART_DR register address in the DMA control register to configure it as the
+  26:Core/Src/UART.c ****      *destination of the transfer. The data will be moved to this address from memory after
+  27:Core/Src/UART.c ****      *each TXE event.
+  28:Core/Src/UART.c ****      * 2. Write the memory address in the DMA control register to configure it as the source of
+  29:Core/Src/UART.c ****      *the transfer. The data will be loaded into the USART_DR register from this memory
+  30:Core/Src/UART.c ****      *area after each TXE event.
+  31:Core/Src/UART.c ****      *3. Configure the total number of bytes to be transferred to the DMA control register.
+  32:Core/Src/UART.c ****      *4. Configure the channel priority in the DMA register
+  33:Core/Src/UART.c ****      *5. Configure DMA interrupt generation after half/ full transfer as required by the
+  34:Core/Src/UART.c ****      *application.
+  35:Core/Src/UART.c ****      *6. Clear the TC bit in the SR register by writing 0 to it.
+  36:Core/Src/UART.c ****      *7. Activate the channel in the DMA register
+  37:Core/Src/UART.c ****      */
+  38:Core/Src/UART.c ****     DMA1_Stream6 -> PAR = (uint32_t) &(USART2 -> DR);  /*1*/
+ 133              		.loc 1 38 5 view .LVU38
+ 134              		.loc 1 38 25 is_stmt 0 view .LVU39
+ 135 0000 154B     		ldr	r3, .L6
+ 136 0002 164A     		ldr	r2, .L6+4
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 4
+
+
+ 137 0004 C3F8A820 		str	r2, [r3, #168]
+  39:Core/Src/UART.c ****     DMA1_Stream6 ->  M0AR = (uint32_t)pData; /*2*/
+ 138              		.loc 1 39 5 is_stmt 1 view .LVU40
+ 139              		.loc 1 39 27 is_stmt 0 view .LVU41
+ 140 0008 C3F8AC00 		str	r0, [r3, #172]
+  40:Core/Src/UART.c ****     DMA1_Stream6 -> NDTR = Size; /*3*/
+ 141              		.loc 1 40 5 is_stmt 1 view .LVU42
+ 142              		.loc 1 40 26 is_stmt 0 view .LVU43
+ 143 000c C3F8A410 		str	r1, [r3, #164]
+  41:Core/Src/UART.c ****     /**
+  42:Core/Src/UART.c ****      * Circular Mode, Channel 4 Selection, Memory to Peripheral
+  43:Core/Src/UART.c ****      * Memory Increment
+  44:Core/Src/UART.c ****     */
+  45:Core/Src/UART.c ****     DMA1_Stream6  -> CR |= (0x04<<25) | DMA_SxCR_MINC| DMA_SxCR_DIR_0|DMA_SxCR_TCIE;
+ 144              		.loc 1 45 5 is_stmt 1 view .LVU44
+ 145              		.loc 1 45 19 is_stmt 0 view .LVU45
+ 146 0010 D3F8A020 		ldr	r2, [r3, #160]
+ 147              		.loc 1 45 25 view .LVU46
+ 148 0014 42F00062 		orr	r2, r2, #134217728
+ 149 0018 42F48A62 		orr	r2, r2, #1104
+ 150 001c C3F8A020 		str	r2, [r3, #160]
+  46:Core/Src/UART.c ****     USART2 -> CR1 |= USART_CR1_TE;
+ 151              		.loc 1 46 5 is_stmt 1 view .LVU47
+ 152              		.loc 1 46 12 is_stmt 0 view .LVU48
+ 153 0020 0F49     		ldr	r1, .L6+8
+ 154              	.LVL1:
+ 155              		.loc 1 46 12 view .LVU49
+ 156 0022 CA68     		ldr	r2, [r1, #12]
+ 157              		.loc 1 46 19 view .LVU50
+ 158 0024 42F00802 		orr	r2, r2, #8
+ 159 0028 CA60     		str	r2, [r1, #12]
+  47:Core/Src/UART.c **** 
+  48:Core/Src/UART.c ****     DMA1_Stream6 -> CR |= DMA_SxCR_EN; //Enable DMA
+ 160              		.loc 1 48 5 is_stmt 1 view .LVU51
+ 161              		.loc 1 48 18 is_stmt 0 view .LVU52
+ 162 002a D3F8A020 		ldr	r2, [r3, #160]
+ 163              		.loc 1 48 24 view .LVU53
+ 164 002e 42F00102 		orr	r2, r2, #1
+ 165 0032 C3F8A020 		str	r2, [r3, #160]
+  49:Core/Src/UART.c ****     while(!(DMA1->HISR & DMA_HISR_TCIF6));
+ 166              		.loc 1 49 5 is_stmt 1 view .LVU54
+ 167              	.L5:
+ 168              		.loc 1 49 11 discriminator 1 view .LVU55
+ 169              		.loc 1 49 17 is_stmt 0 discriminator 1 view .LVU56
+ 170 0036 084B     		ldr	r3, .L6
+ 171 0038 5B68     		ldr	r3, [r3, #4]
+ 172              		.loc 1 49 11 discriminator 1 view .LVU57
+ 173 003a 13F4001F 		tst	r3, #2097152
+ 174 003e FAD0     		beq	.L5
+  50:Core/Src/UART.c ****     DMA1-> HIFCR |= DMA_HIFCR_CTCIF6;
+ 175              		.loc 1 50 5 is_stmt 1 view .LVU58
+ 176              		.loc 1 50 9 is_stmt 0 view .LVU59
+ 177 0040 054B     		ldr	r3, .L6
+ 178 0042 DA68     		ldr	r2, [r3, #12]
+ 179              		.loc 1 50 18 view .LVU60
+ 180 0044 42F40012 		orr	r2, r2, #2097152
+ 181 0048 DA60     		str	r2, [r3, #12]
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 5
+
+
+  51:Core/Src/UART.c ****      DMA1_Stream6 -> CR &= ~DMA_SxCR_EN; //Enable DMA
+ 182              		.loc 1 51 6 is_stmt 1 view .LVU61
+ 183              		.loc 1 51 19 is_stmt 0 view .LVU62
+ 184 004a D3F8A020 		ldr	r2, [r3, #160]
+ 185              		.loc 1 51 25 view .LVU63
+ 186 004e 22F00102 		bic	r2, r2, #1
+ 187 0052 C3F8A020 		str	r2, [r3, #160]
+  52:Core/Src/UART.c **** 
+  53:Core/Src/UART.c **** }
+ 188              		.loc 1 53 1 view .LVU64
+ 189 0056 7047     		bx	lr
+ 190              	.L7:
+ 191              		.align	2
+ 192              	.L6:
+ 193 0058 00600240 		.word	1073897472
+ 194 005c 04440040 		.word	1073759236
+ 195 0060 00440040 		.word	1073759232
+ 196              		.cfi_endproc
+ 197              	.LFE131:
+ 199              		.text
+ 200              	.Letext0:
+ 201              		.file 2 "c:\\users\\david\\appdata\\roaming\\code\\user\\globalstorage\\bmd.stm32-for-vscode\\@xpa
+ 202              		.file 3 "c:\\users\\david\\appdata\\roaming\\code\\user\\globalstorage\\bmd.stm32-for-vscode\\@xpa
+ 203              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
+ARM GAS  C:\Users\David\AppData\Local\Temp\cclI5Njs.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 UART.c
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:21     .text.UART2_Init:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:27     .text.UART2_Init:0000000000000000 UART2_Init
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:113    .text.UART2_Init:000000000000006c $d
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:119    .text.UART2_DMA_Transmit:0000000000000000 $t
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:125    .text.UART2_DMA_Transmit:0000000000000000 UART2_DMA_Transmit
+C:\Users\David\AppData\Local\Temp\cclI5Njs.s:193    .text.UART2_DMA_Transmit:0000000000000058 $d
+
+NO UNDEFINED SYMBOLS
